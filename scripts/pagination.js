@@ -26,7 +26,8 @@ var paginationButton = function(i, onPageChange) {
     button.setAttribute('data-page', str);
     button.innerText = str;
     button.ariaLabel = str;
-    button.addEventListener('click', function() {
+    button.addEventListener('click', function(e) {
+        console.log(e.target);
         var page = button.getAttribute('data-page');
         if (page === null) {
             return;
@@ -41,6 +42,7 @@ var paginationInput = function(onPageChange) {
     input.placeholder = '...';
     input.className = 'input w-20 mx-4 text-center bg-base-300';
     input.addEventListener('change', function(e) {
+        console.log(e.target);
         if (!_instanceof(e.target, HTMLInputElement)) {
             return;
         }
@@ -53,6 +55,7 @@ var paginationInput = function(onPageChange) {
     return input;
 };
 var genPaginationElements = function(pages, container, onPageChange) {
+    console.log('GEN PAGINATION ELEMENTS');
     // Add new pagination buttons
     if (pages > _constants.MAX_PAGINATION_BUTTONS) {
         container.appendChild(paginationButton(0, onPageChange));

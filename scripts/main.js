@@ -1,200 +1,460 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SEARCH_INPUT_ID = exports.PAGES_PER_PARTITION = exports.MAX_PAGINATION_BUTTONS = exports.PAGE_SIZE = void 0;
-exports.PAGE_SIZE = 15;
-exports.MAX_PAGINATION_BUTTONS = 30;
-exports.PAGES_PER_PARTITION = 500;
-exports.SEARCH_INPUT_ID = 'feature-search';
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+function _export(target, all) {
+    for(var name in all)Object.defineProperty(target, name, {
+        enumerable: true,
+        get: all[name]
+    });
+}
+_export(exports, {
+    MAX_PAGINATION_BUTTONS: function() {
+        return MAX_PAGINATION_BUTTONS;
+    },
+    PAGES_PER_PARTITION: function() {
+        return PAGES_PER_PARTITION;
+    },
+    PAGE_SIZE: function() {
+        return PAGE_SIZE;
+    },
+    PARTITION_SIZE: function() {
+        return PARTITION_SIZE;
+    },
+    SEARCH_INPUT_ID: function() {
+        return SEARCH_INPUT_ID;
+    }
+});
+var PAGE_SIZE = 15;
+var PARTITION_SIZE = 100;
+var MAX_PAGINATION_BUTTONS = 30;
+var PAGES_PER_PARTITION = 100;
+var SEARCH_INPUT_ID = 'feature-search';
 
 },{}],2:[function(require,module,exports){
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+function _export(target, all) {
+    for(var name in all)Object.defineProperty(target, name, {
+        enumerable: true,
+        get: all[name]
     });
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.initEngine = void 0;
-const constants_1 = require("./constants");
-const features_1 = require("./features");
-const templating_1 = require("./templating");
-const pagination_1 = require("./pagination");
-const contentElem = document.getElementById('content');
+}
+_export(exports, {
+    default: function() {
+        return _default;
+    },
+    initEngine: function() {
+        return initEngine;
+    }
+});
+var _constants = require("../constants");
+var _features = require("./features");
+var _templating = require("./templating");
+var _pagination = require("./pagination");
+function _array_like_to_array(arr, len) {
+    if (len == null || len > arr.length) len = arr.length;
+    for(var i = 0, arr2 = new Array(len); i < len; i++)arr2[i] = arr[i];
+    return arr2;
+}
+function _array_without_holes(arr) {
+    if (Array.isArray(arr)) return _array_like_to_array(arr);
+}
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
+    try {
+        var info = gen[key](arg);
+        var value = info.value;
+    } catch (error) {
+        reject(error);
+        return;
+    }
+    if (info.done) {
+        resolve(value);
+    } else {
+        Promise.resolve(value).then(_next, _throw);
+    }
+}
+function _async_to_generator(fn) {
+    return function() {
+        var self = this, args = arguments;
+        return new Promise(function(resolve, reject) {
+            var gen = fn.apply(self, args);
+            function _next(value) {
+                asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
+            }
+            function _throw(err) {
+                asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
+            }
+            _next(undefined);
+        });
+    };
+}
+function _instanceof(left, right) {
+    if (right != null && typeof Symbol !== "undefined" && right[Symbol.hasInstance]) {
+        return !!right[Symbol.hasInstance](left);
+    } else {
+        return left instanceof right;
+    }
+}
+function _iterable_to_array(iter) {
+    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
+}
+function _non_iterable_spread() {
+    throw new TypeError("Invalid attempt to spread non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+function _to_consumable_array(arr) {
+    return _array_without_holes(arr) || _iterable_to_array(arr) || _unsupported_iterable_to_array(arr) || _non_iterable_spread();
+}
+function _unsupported_iterable_to_array(o, minLen) {
+    if (!o) return;
+    if (typeof o === "string") return _array_like_to_array(o, minLen);
+    var n = Object.prototype.toString.call(o).slice(8, -1);
+    if (n === "Object" && o.constructor) n = o.constructor.name;
+    if (n === "Map" || n === "Set") return Array.from(n);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _array_like_to_array(o, minLen);
+}
+function _ts_generator(thisArg, body) {
+    var f, y, t, g, _ = {
+        label: 0,
+        sent: function() {
+            if (t[0] & 1) throw t[1];
+            return t[1];
+        },
+        trys: [],
+        ops: []
+    };
+    return g = {
+        next: verb(0),
+        "throw": verb(1),
+        "return": verb(2)
+    }, typeof Symbol === "function" && (g[Symbol.iterator] = function() {
+        return this;
+    }), g;
+    function verb(n) {
+        return function(v) {
+            return step([
+                n,
+                v
+            ]);
+        };
+    }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while(_)try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [
+                op[0] & 2,
+                t.value
+            ];
+            switch(op[0]){
+                case 0:
+                case 1:
+                    t = op;
+                    break;
+                case 4:
+                    _.label++;
+                    return {
+                        value: op[1],
+                        done: false
+                    };
+                case 5:
+                    _.label++;
+                    y = op[1];
+                    op = [
+                        0
+                    ];
+                    continue;
+                case 7:
+                    op = _.ops.pop();
+                    _.trys.pop();
+                    continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+                        _ = 0;
+                        continue;
+                    }
+                    if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
+                        _.label = op[1];
+                        break;
+                    }
+                    if (op[0] === 6 && _.label < t[1]) {
+                        _.label = t[1];
+                        t = op;
+                        break;
+                    }
+                    if (t && _.label < t[2]) {
+                        _.label = t[2];
+                        _.ops.push(op);
+                        break;
+                    }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop();
+                    continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) {
+            op = [
+                6,
+                e
+            ];
+            y = 0;
+        } finally{
+            f = t = 0;
+        }
+        if (op[0] & 5) throw op[1];
+        return {
+            value: op[0] ? op[1] : void 0,
+            done: true
+        };
+    }
+}
+var contentElem = document.getElementById('content');
 if (contentElem === null) {
     throw new Error('Content container not found');
 }
-const paginationElem = document.getElementById('pagination');
+var paginationElem = document.getElementById('pagination');
 if (paginationElem === null) {
     throw new Error('Pagination container not found');
 }
-const engineInternal = {
+var engineInternal = {
     allScenarios: [],
     initialized: false,
     searchFilter: '',
     failedFeaturesOnly: false,
-    failedScenariosOnly: (enabled) => {
-        for (const scenario of engineInternal.allScenarios) {
-            if (!(scenario instanceof HTMLElement)) {
-                continue;
+    failedScenariosOnly: function(enabled) {
+        var _iteratorNormalCompletion = true, _didIteratorError = false, _iteratorError = undefined;
+        try {
+            for(var _iterator = engineInternal.allScenarios[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true){
+                var scenario = _step.value;
+                if (!_instanceof(scenario, HTMLElement)) {
+                    continue;
+                }
+                if (!enabled || scenario.getAttribute('data-status') === 'failed') {
+                    scenario.style.display = 'grid';
+                } else {
+                    scenario.style.display = 'none';
+                }
             }
-            if (!enabled || scenario.getAttribute('data-status') === 'failed') {
-                scenario.style.display = 'grid';
-            }
-            else {
-                scenario.style.display = 'none';
+        } catch (err) {
+            _didIteratorError = true;
+            _iteratorError = err;
+        } finally{
+            try {
+                if (!_iteratorNormalCompletion && _iterator.return != null) {
+                    _iterator.return();
+                }
+            } finally{
+                if (_didIteratorError) {
+                    throw _iteratorError;
+                }
             }
         }
     },
-    togglePage: (page) => __awaiter(void 0, void 0, void 0, function* () {
-        const partition = Math.floor(page / constants_1.PAGES_PER_PARTITION);
-        const pages = yield (0, features_1.features)(partition, engineInternal.failedFeaturesOnly, engineInternal.searchFilter);
-        contentElem.innerHTML = (0, templating_1.genFeatureHtml)(pages[page]);
-        engineInternal.allScenarios.splice(0, engineInternal.allScenarios.length);
-        engineInternal.allScenarios.push(...document.getElementsByClassName('scenario'));
-    }),
+    togglePage: function() {
+        var _ref = _async_to_generator(function(page) {
+            var _engineInternal_allScenarios, partition, offset, pages;
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        partition = Math.floor(page / _constants.PAGES_PER_PARTITION);
+                        offset = page % _constants.PAGES_PER_PARTITION;
+                        return [
+                            4,
+                            (0, _features.features)(partition, engineInternal.failedFeaturesOnly, engineInternal.searchFilter)
+                        ];
+                    case 1:
+                        pages = _state.sent();
+                        contentElem.innerHTML = (0, _templating.genFeatureHtml)(pages[offset]);
+                        engineInternal.allScenarios.splice(0, engineInternal.allScenarios.length);
+                        (_engineInternal_allScenarios = engineInternal.allScenarios).push.apply(_engineInternal_allScenarios, _to_consumable_array(document.getElementsByClassName('scenario')));
+                        return [
+                            2
+                        ];
+                }
+            });
+        });
+        return function(page) {
+            return _ref.apply(this, arguments);
+        };
+    }(),
     /**
      * Updates the pagination based on the current filters.
-     */
-    updatePagination: () => {
-        const pages = engineInternal.failedFeaturesOnly
-            ? window.failed.pages
-            : window.data.pages;
+     */ updatePagination: function() {
+        var pages = engineInternal.failedFeaturesOnly ? window.failed.pages : window.data.pages;
         // Remove existing pagination buttons
         paginationElem.innerHTML = '';
-        (0, pagination_1.genPaginationElements)(pages, paginationElem, engine.togglePage);
-    },
+        (0, _pagination.genPaginationElements)(pages, paginationElem, function(page) {
+            return engine.togglePage(page);
+        });
+    }
 };
-const initEngine = (failedOnly) => {
+var initEngine = function(failedOnly) {
     if (engineInternal.initialized) {
         return;
     }
     engineInternal.failedFeaturesOnly = failedOnly;
     engineInternal.initialized = true;
 };
-exports.initEngine = initEngine;
-const engine = {
-    setSearchFilter: (filter) => {
+var engine = {
+    setSearchFilter: function(filter) {
         engineInternal.searchFilter = filter;
         engineInternal.updatePagination();
         engineInternal.togglePage(0);
     },
-    setFailedScenariosOnly: (enabled) => {
+    setFailedScenariosOnly: function(enabled) {
         engineInternal.failedScenariosOnly(enabled);
     },
-    setFailedFeaturesOnly: (enabled) => {
+    setFailedFeaturesOnly: function(enabled) {
         engineInternal.failedFeaturesOnly = enabled;
         engineInternal.updatePagination();
         engineInternal.togglePage(0);
     },
-    setFailedOnly: (enabled) => {
+    setFailedOnly: function(enabled) {
         engine.setFailedFeaturesOnly(enabled);
         engine.setFailedScenariosOnly(enabled);
     },
-    togglePage: (page) => __awaiter(void 0, void 0, void 0, function* () {
-        engineInternal.togglePage(page);
-    }),
+    togglePage: function() {
+        var _ref = _async_to_generator(function(page) {
+            return _ts_generator(this, function(_state) {
+                engineInternal.togglePage(page);
+                return [
+                    2
+                ];
+            });
+        });
+        return function(page) {
+            return _ref.apply(this, arguments);
+        };
+    }()
 };
-exports.default = engine;
+var _default = engine;
 
-},{"./constants":1,"./features":3,"./pagination":5,"./templating":6}],3:[function(require,module,exports){
+},{"../constants":1,"./features":3,"./pagination":5,"./templating":6}],3:[function(require,module,exports){
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.features = void 0;
-const constants_1 = require("./constants");
-const trie_1 = require("./trie");
-let cache;
-const lastCall = {
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "features", {
+    enumerable: true,
+    get: function() {
+        return features;
+    }
+});
+var _constants = require("../constants");
+var _trie = require("./trie");
+var cache;
+var lastCall = {
     partitionIndex: -1,
     failedOnly: false,
-    searchFilter: '',
+    searchFilter: ''
 };
-const features = (partitionIndex, failedOnly, searchFilter) => {
-    if (cache !== undefined &&
-        lastCall.partitionIndex === partitionIndex &&
-        lastCall.failedOnly === failedOnly &&
-        lastCall.searchFilter === searchFilter) {
+var features = function(partitionIndex, failedOnly, searchFilter) {
+    if (cache !== undefined && lastCall.partitionIndex === partitionIndex && lastCall.failedOnly === failedOnly && lastCall.searchFilter === searchFilter) {
         return Promise.resolve(cache);
     }
-    if (!searchFilter) {
-        return (failedOnly ? window.failed.providers : window.data.providers)[partitionIndex]();
-    }
-    const results = (failedOnly ? trie_1.failedTrie : trie_1.allTrie).get(searchFilter);
-    const ret = [];
-    let page = [];
-    let i = 0;
-    for (const f of results) {
-        if (i >= constants_1.PAGE_SIZE) {
-            ret.push(page);
-            page = [];
-            i = 0;
+    return (failedOnly ? window.failed.providers : window.data.providers)[partitionIndex]();
+    var results = (failedOnly ? _trie.failedTrie : _trie.allTrie).get(searchFilter);
+    var ret = [];
+    var page = [];
+    var i = 0;
+    var _iteratorNormalCompletion = true, _didIteratorError = false, _iteratorError = undefined;
+    try {
+        for(var _iterator = results[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true){
+            var f = _step.value;
+            if (i >= _constants.PAGE_SIZE) {
+                ret.push(page);
+                page = [];
+                i = 0;
+            }
+            page.push(f.feature);
+            i++;
         }
-        page.push(f.feature);
-        i++;
+    } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+    } finally{
+        try {
+            if (!_iteratorNormalCompletion && _iterator.return != null) {
+                _iterator.return();
+            }
+        } finally{
+            if (_didIteratorError) {
+                throw _iteratorError;
+            }
+        }
     }
     ret.push(page);
     return Promise.resolve(ret);
 };
-exports.features = features;
 
-},{"./constants":1,"./trie":7}],4:[function(require,module,exports){
+},{"../constants":1,"./trie":7}],4:[function(require,module,exports){
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = addListeners;
-const constants_1 = require("./constants");
-const engine_1 = __importDefault(require("./engine"));
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "default", {
+    enumerable: true,
+    get: function() {
+        return addListeners;
+    }
+});
+var _constants = require("../constants");
+var _engine = /*#__PURE__*/ _interop_require_default(require("./engine"));
+function _instanceof(left, right) {
+    if (right != null && typeof Symbol !== "undefined" && right[Symbol.hasInstance]) {
+        return !!right[Symbol.hasInstance](left);
+    } else {
+        return left instanceof right;
+    }
+}
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
 function addListeners(showFailed) {
     /**
      * Add an event listener to filter features based on the search input.
-     */
-    const searchElem = document.getElementById(constants_1.SEARCH_INPUT_ID);
+     */ var searchElem = document.getElementById(_constants.SEARCH_INPUT_ID);
     if (searchElem !== null) {
-        searchElem.addEventListener('change', (e) => {
-            if (!(e.target instanceof HTMLInputElement)) {
+        searchElem.addEventListener('change', function(e) {
+            if (!_instanceof(e.target, HTMLInputElement)) {
                 return;
             }
-            engine_1.default.setSearchFilter(e.target.value);
+            _engine.default.setSearchFilter(e.target.value);
         });
     }
-    const FAILED_FEATURES_ONLY_CHECKBOX_ID = 'fail-filter-feature';
+    var FAILED_FEATURES_ONLY_CHECKBOX_ID = 'fail-filter-feature';
     /**
      * Add an event listener to filter features based on if they have failed.
-     */
-    const failedFeaturesCheckbox = document.getElementById(FAILED_FEATURES_ONLY_CHECKBOX_ID);
+     */ var failedFeaturesCheckbox = document.getElementById(FAILED_FEATURES_ONLY_CHECKBOX_ID);
     if (failedFeaturesCheckbox !== null) {
-        failedFeaturesCheckbox.addEventListener('change', (e) => {
-            if (!(e.target instanceof HTMLInputElement)) {
+        failedFeaturesCheckbox.addEventListener('change', function(e) {
+            if (!_instanceof(e.target, HTMLInputElement)) {
                 return;
             }
-            engine_1.default.setFailedFeaturesOnly(e.target.checked);
+            _engine.default.setFailedFeaturesOnly(e.target.checked);
         });
     }
-    const FAILED_SCENARIOS_ONLY_CHECKBOX_ID = 'fail-filter-scenario';
-    if (failedFeaturesCheckbox === null ||
-        !(failedFeaturesCheckbox instanceof HTMLInputElement)) {
+    var FAILED_SCENARIOS_ONLY_CHECKBOX_ID = 'fail-filter-scenario';
+    if (failedFeaturesCheckbox === null || !_instanceof(failedFeaturesCheckbox, HTMLInputElement)) {
         throw new Error("Couldn't find failed features filter checkbox");
     }
     /**
      * Add an event listener to filter scenarios based on if they have failed.
-     */
-    const failedScenariosCheckbox = document.getElementById(FAILED_SCENARIOS_ONLY_CHECKBOX_ID);
-    if (failedScenariosCheckbox === null ||
-        !(failedScenariosCheckbox instanceof HTMLInputElement)) {
+     */ var failedScenariosCheckbox = document.getElementById(FAILED_SCENARIOS_ONLY_CHECKBOX_ID);
+    if (failedScenariosCheckbox === null || !_instanceof(failedScenariosCheckbox, HTMLInputElement)) {
         throw new Error("Couldn't find failed scenarios filter checkbox");
     }
     if (failedScenariosCheckbox !== null) {
-        failedScenariosCheckbox.addEventListener('change', (e) => {
-            if (!(e.target instanceof HTMLInputElement)) {
+        failedScenariosCheckbox.addEventListener('change', function(e) {
+            if (!_instanceof(e.target, HTMLInputElement)) {
                 return;
             }
-            engine_1.default.setFailedScenariosOnly(e.target.checked);
+            _engine.default.setFailedScenariosOnly(e.target.checked);
         });
     }
     if (showFailed) {
@@ -203,24 +463,37 @@ function addListeners(showFailed) {
     }
 }
 
-},{"./constants":1,"./engine":2}],5:[function(require,module,exports){
+},{"../constants":1,"./engine":2}],5:[function(require,module,exports){
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.genPaginationElements = void 0;
-const constants_1 = require("./constants");
-const paginationButton = (i, onPageChange) => {
-    const button = document.createElement('input');
-    const str = i.toString();
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "genPaginationElements", {
+    enumerable: true,
+    get: function() {
+        return genPaginationElements;
+    }
+});
+var _constants = require("../constants");
+function _instanceof(left, right) {
+    if (right != null && typeof Symbol !== "undefined" && right[Symbol.hasInstance]) {
+        return !!right[Symbol.hasInstance](left);
+    } else {
+        return left instanceof right;
+    }
+}
+var paginationButton = function(i, onPageChange) {
+    var button = document.createElement('input');
+    var str = i.toString();
     button.type = 'radio';
     button.name = 'options';
     button.checked = i === 0;
-    button.className =
-        'pagination-button pagination-button-join-item btn btn-square';
+    button.className = 'pagination-button pagination-button-join-item btn btn-square';
     button.setAttribute('data-page', str);
     button.innerText = str;
     button.ariaLabel = str;
-    button.addEventListener('click', () => {
-        const page = button.getAttribute('data-page');
+    button.addEventListener('click', function(e) {
+        var page = button.getAttribute('data-page');
         if (page === null) {
             return;
         }
@@ -228,16 +501,16 @@ const paginationButton = (i, onPageChange) => {
     });
     return button;
 };
-const paginationInput = (onPageChange) => {
-    const input = document.createElement('input');
+var paginationInput = function(onPageChange) {
+    var input = document.createElement('input');
     input.type = 'number';
     input.placeholder = '...';
     input.className = 'input w-20 mx-4 text-center bg-base-300';
-    input.addEventListener('change', (e) => {
-        if (!(e.target instanceof HTMLInputElement)) {
+    input.addEventListener('change', function(e) {
+        if (!_instanceof(e.target, HTMLInputElement)) {
             return;
         }
-        const page = parseInt(e.target.value);
+        var page = parseInt(e.target.value);
         if (isNaN(page)) {
             return;
         }
@@ -245,296 +518,127 @@ const paginationInput = (onPageChange) => {
     });
     return input;
 };
-/**
- * Updates the pagination based on the current filters.
- */
-const genPaginationElements = (pages, container, onPageChange) => {
+var genPaginationElements = function(pages, container, onPageChange) {
     // Add new pagination buttons
-    if (pages > constants_1.MAX_PAGINATION_BUTTONS) {
+    if (pages > _constants.MAX_PAGINATION_BUTTONS) {
         container.appendChild(paginationButton(0, onPageChange));
         container.appendChild(paginationInput(onPageChange));
         container.appendChild(paginationButton(pages - 1, onPageChange));
-    }
-    else {
-        Array(pages)
-            .fill(0)
-            .forEach((_, i) => {
+    } else {
+        Array(pages).fill(0).forEach(function(_, i) {
             container.appendChild(paginationButton(i, onPageChange));
         });
     }
 };
-exports.genPaginationElements = genPaginationElements;
 
-},{"./constants":1}],6:[function(require,module,exports){
+},{"../constants":1}],6:[function(require,module,exports){
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.genFeatureHtml = void 0;
-const mustache_1 = __importDefault(require("mustache"));
-const beforeAfterTemplate = `
- <li class="pt-2 max-w-full">
-        <div>
-            <div class="flex flex-row justify-between text-md">
-                <div class="flex flex-row">
-                    <span class="font-bold">{{keyword}}</span>
-                    {{#match.location}}
-                        <span class="indent-2">{{match.location}}</span>
-                    {{/match.location}}
-                </div>
-                <div class="flex flex-row items-center">
-                    <p class="px-2">
-                        {{result.duration}}
-                    </p>
-                    {{ > status}}
-                </div>
-            </div>
-        </div>
-        {{#embeddings}}
-            {{#isPng}}
-                <img src="data:image/png;base64,{{data}}" />
-            {{/isPng}}
-            {{#isJpeg}}
-                <img src="data:image/jpeg;base64,{{data}}" />
-            {{/isJpeg}}
-            {{#isText}}
-                <pre>{{{data}}}</pre>
-            {{/isText}}
-        {{/embeddings}}
-        {{#result.error_message}}
-            {{#match.location}}
-                <a className="text-primary underline">
-                    {{match.location}}
-                </a>
-            {{/match.location}}
-            <div className="max-h-96 overflow-y-auto p-4">
-                <code className="text-sm bg-base-100 text-base-content p-2">
-                    {{result.error_message}}
-                </code>
-            </div>
-        {{/result.error_message}}
-    </li>
-`;
-const statusTemplate = `
-    {{#result.passed}}
-    <div class="badge badge-success gap-2">Passed</div>
-    {{/result.passed}}
-    {{#result.failed}}
-    <div class="badge badge-error gap-2">Failed</div>
-    {{/result.failed}}
-    {{#result.skipped}}
-    <div class="badge badge-warning gap-2">Skipped</div>
-    {{/result.skipped}}
-    {{#result.undefined}}
-    <div class="badge badge-warning gap-2">Undefined</div>
-    {{/result.undefined}}
-    {{#result.ambiguous}}
-    <div class="badge badge-warning gap-2">Ambiguous</div>
-    {{/result.ambiguous}}
-    {{#result.pending}}
-    <div class="badge badge-info gap-2">Pending</div>
-    {{/result.pending}}
-`;
-const stepTemplate = `
-    <li class="pt-2 max-w-full">
-        <div>
-            <div class="flex flex-row justify-between text-md">
-                <div class="flex flex-row">
-                    <span class="font-bold">{{keyword}}</span>
-                    <span class="indent-2">{{name}}</span>
-                </div>
-                <div class="flex flex-row items-center">
-                    <p class="px-2">
-                        {{result.duration}}
-                    </p>
-                    {{ > status}}
-                </div>
-            </div>
-
-            <div class="max-w-[75%]">
-                {{#argumentz}}
-                    {{#argumentz}}
-                        <table class="table">
-                            {{#rows}}
-                                <tr>
-                                    {{#cells}}
-                                        <td>
-                                            {{.}}
-                                        </td>
-                                    {{/cells}}
-                                </tr>
-                            {{/rows}}
-                        </table>
-                    {{/argumentz}}
-                {{/argumentz}}
-            </div>
-        </div>
-        {{#embeddings}}
-            {{#isPng}}
-                <img src="data:image/png;base64,{{data}}" />
-            {{/isPng}}
-            {{#isJpeg}}
-                <img src="data:image/jpeg;base64,{{data}}" />
-            {{/isJpeg}}
-            {{#isText}}
-                <pre>{{{data}}}</pre>
-            {{/isText}}
-        {{/embeddings}}
-        {{#result.error_message}}
-            {{#match.location}}
-                <a className="text-primary underline">
-                    {{match.location}}
-                </a>
-            {{/match.location}}
-            <div className="max-h-96 overflow-y-auto p-4">
-                <code className="text-sm bg-base-100 text-base-content p-2">
-                    {{result.error_message}}
-                </code>
-            </div>
-        {{/result.error_message}}
-    </li>
-`;
-const scenarioTemplate = `
-<div
-    {{#failed}}data-status="failed"{{/failed}}
-    class="scenario collapse bg-base-300 m-2 shadow-lg shadow-base-content"
->
-    <input class="min-h-1" type="checkbox" />
-    <h2
-        class="text-base-content collapse-title text-md font-medium px-2 py-0.5 min-h-0 bg-opacity-50 {{#failed}}bg-error text-error-content{{/failed}}{{^failed}}bg-neutral text-neutral-content{{/failed}}"
-    >
-        {{name}}
-    </h2>
-    <ul class="collapse-content">
-        {{#before}}
-            {{> beforeAfter}}
-        {{/before}}
-        {{#steps}}
-            {{> step}}
-        {{/steps}}
-        {{#after}}
-            {{> beforeAfter}}
-        {{/after}}
-    </ul>
-</div>
-<div`;
-const partial = {
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "genFeatureHtml", {
+    enumerable: true,
+    get: function() {
+        return genFeatureHtml;
+    }
+});
+var _mustache = /*#__PURE__*/ _interop_require_default(require("mustache"));
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+var beforeAfterTemplate = '\n <li class="pt-2 max-w-full">\n        <div>\n            <div class="flex flex-row justify-between text-md">\n                <div class="flex flex-row">\n                    <span class="font-bold">{{keyword}}</span>\n                    {{#match.location}}\n                        <span class="indent-2">{{match.location}}</span>\n                    {{/match.location}}\n                </div>\n                <div class="flex flex-row items-center">\n                    <p class="px-2">\n                        {{result.duration}}\n                    </p>\n                    {{ > status}}\n                </div>\n            </div>\n        </div>\n        {{#embeddings}}\n            {{#isPng}}\n                <img src="data:image/png;base64,{{data}}" />\n            {{/isPng}}\n            {{#isJpeg}}\n                <img src="data:image/jpeg;base64,{{data}}" />\n            {{/isJpeg}}\n            {{#isText}}\n                <pre>{{{data}}}</pre>\n            {{/isText}}\n        {{/embeddings}}\n        {{#result.error_message}}\n            {{#match.location}}\n                <a className="text-primary underline">\n                    {{match.location}}\n                </a>\n            {{/match.location}}\n            <div className="max-h-96 overflow-y-auto p-4">\n                <code className="text-sm bg-base-100 text-base-content p-2">\n                    {{result.error_message}}\n                </code>\n            </div>\n        {{/result.error_message}}\n    </li>\n';
+var statusTemplate = '\n    {{#result.passed}}\n    <div class="badge badge-success gap-2">Passed</div>\n    {{/result.passed}}\n    {{#result.failed}}\n    <div class="badge badge-error gap-2">Failed</div>\n    {{/result.failed}}\n    {{#result.skipped}}\n    <div class="badge badge-warning gap-2">Skipped</div>\n    {{/result.skipped}}\n    {{#result.undefined}}\n    <div class="badge badge-warning gap-2">Undefined</div>\n    {{/result.undefined}}\n    {{#result.ambiguous}}\n    <div class="badge badge-warning gap-2">Ambiguous</div>\n    {{/result.ambiguous}}\n    {{#result.pending}}\n    <div class="badge badge-info gap-2">Pending</div>\n    {{/result.pending}}\n';
+var stepTemplate = '\n    <li class="pt-2 max-w-full">\n        <div>\n            <div class="flex flex-row justify-between text-md">\n                <div class="flex flex-row">\n                    <span class="font-bold">{{keyword}}</span>\n                    <span class="indent-2">{{name}}</span>\n                </div>\n                <div class="flex flex-row items-center">\n                    <p class="px-2">\n                        {{result.duration}}\n                    </p>\n                    {{ > status}}\n                </div>\n            </div>\n\n            <div class="max-w-[75%]">\n                {{#argumentz}}\n                    {{#argumentz}}\n                        <table class="table">\n                            {{#rows}}\n                                <tr>\n                                    {{#cells}}\n                                        <td>\n                                            {{.}}\n                                        </td>\n                                    {{/cells}}\n                                </tr>\n                            {{/rows}}\n                        </table>\n                    {{/argumentz}}\n                {{/argumentz}}\n            </div>\n        </div>\n        {{#embeddings}}\n            {{#isPng}}\n                <img src="data:image/png;base64,{{data}}" />\n            {{/isPng}}\n            {{#isJpeg}}\n                <img src="data:image/jpeg;base64,{{data}}" />\n            {{/isJpeg}}\n            {{#isText}}\n                <pre>{{{data}}}</pre>\n            {{/isText}}\n        {{/embeddings}}\n        {{#result.error_message}}\n            {{#match.location}}\n                <a className="text-primary underline">\n                    {{match.location}}\n                </a>\n            {{/match.location}}\n            <div className="max-h-96 overflow-y-auto p-4">\n                <code className="text-sm bg-base-100 text-base-content p-2">\n                    {{result.error_message}}\n                </code>\n            </div>\n        {{/result.error_message}}\n    </li>\n';
+var scenarioTemplate = '\n<div\n    {{#failed}}data-status="failed"{{/failed}}\n    class="scenario collapse bg-base-300 m-2 shadow-lg shadow-base-content"\n>\n    <input class="min-h-1" type="checkbox" />\n    <h2\n        class="text-base-content collapse-title text-md font-medium px-2 py-0.5 min-h-0 bg-opacity-50 {{#failed}}bg-error text-error-content{{/failed}}{{^failed}}bg-neutral text-neutral-content{{/failed}}"\n    >\n        {{name}}\n    </h2>\n    <ul class="collapse-content">\n        {{#before}}\n            {{> beforeAfter}}\n        {{/before}}\n        {{#steps}}\n            {{> step}}\n        {{/steps}}\n        {{#after}}\n            {{> beforeAfter}}\n        {{/after}}\n    </ul>\n</div>\n<div';
+var partial = {
     scenario: scenarioTemplate,
     step: stepTemplate,
     status: statusTemplate,
-    beforeAfter: beforeAfterTemplate,
+    beforeAfter: beforeAfterTemplate
 };
-const template = `{{#features}}
-<div
-    id={model.id}
-    class="page feature collapse bg-base-200 m-1 shadow-xl shadow-base-content"
-    data-name="{{model.name}}"
-    data-status="{{status}}"
-    {...props}
->
-    <input class="min-h-1" type="checkbox" />
-    {{#failed}}
-        <div class="collapse-title rounded-md p-1 flex flex-row justify-between min-h-0 bg-opacity-50 bg-gradient-to-r from-error from-0% to-50% to-neutral">
-    {{/failed}}
-    {{^failed}}
-        <div class="collapse-title rounded-md p-1 flex flex-row justify-between min-h-0 bg-opacity-50 bg-gradient-to-r from-success from-0% to-50% to-neutral">
-    {{/failed}}
-        {{#failed}}
-            <h2 class="text-error-content text-md font-medium m-0 min-h-0">
-        {{/failed}}
-        {{^failed}}
-            <h2 class="text-success-content text-md font-medium m-0 min-h-0">
-        {{/failed}}
-            {{ name }}
-        </h2>
-        <div class="flex flex-row">
-            <div class="text-success h-full rounded-md w-24">
-                {{ stats.passed }} passed
-            </div>
-            <div class="text-error h-full rounded-md w-20">
-                {{ stats.failed }} failed
-            </div>
-            <div class="text-warning h-full rounded-md w-20">
-                {{ stats.skipped }} skipped
-            </div>
-        </div>
-    </div>
-
-    <div class="content collapse-content">
-        <ul>
-            {{ #elements }}
-                {{> scenario}}
-            {{/ elements}}
-        </ul>
-    </div>
-    </div>
-</div>
-{{/features}}`;
-const genFeatureHtml = (features) => {
-    return mustache_1.default.render(template, { features }, partial);
+var template = '{{#features}}\n<div\n    id={model.id}\n    class="page feature collapse bg-base-200 m-1 shadow-xl shadow-base-content"\n    data-name="{{model.name}}"\n    data-status="{{status}}"\n    {...props}\n>\n    <input class="min-h-1" type="checkbox" />\n    {{#failed}}\n        <div class="collapse-title rounded-md p-1 flex flex-row justify-between min-h-0 bg-opacity-50 bg-gradient-to-r from-error from-0% to-50% to-neutral">\n    {{/failed}}\n    {{^failed}}\n        <div class="collapse-title rounded-md p-1 flex flex-row justify-between min-h-0 bg-opacity-50 bg-gradient-to-r from-success from-0% to-50% to-neutral">\n    {{/failed}}\n        {{#failed}}\n            <h2 class="text-error-content text-md font-medium m-0 min-h-0">\n        {{/failed}}\n        {{^failed}}\n            <h2 class="text-success-content text-md font-medium m-0 min-h-0">\n        {{/failed}}\n            {{ name }}\n        </h2>\n        <div class="flex flex-row">\n            <div class="text-success h-full rounded-md w-24">\n                {{ stats.passed }} passed\n            </div>\n            <div class="text-error h-full rounded-md w-20">\n                {{ stats.failed }} failed\n            </div>\n            <div class="text-warning h-full rounded-md w-20">\n                {{ stats.skipped }} skipped\n            </div>\n        </div>\n    </div>\n\n    <div class="content collapse-content">\n        <ul>\n            {{ #elements }}\n                {{> scenario}}\n            {{/ elements}}\n        </ul>\n    </div>\n    </div>\n</div>\n{{/features}}';
+var genFeatureHtml = function(features) {
+    return _mustache.default.render(template, {
+        features: features
+    }, partial);
 };
-exports.genFeatureHtml = genFeatureHtml;
 
 },{"mustache":12}],7:[function(require,module,exports){
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+function _export(target, all) {
+    for(var name in all)Object.defineProperty(target, name, {
+        enumerable: true,
+        get: all[name]
     });
+}
+_export(exports, {
+    allTrie: function() {
+        return allTrie;
+    },
+    failedTrie: function() {
+        return failedTrie;
+    },
+    loadTries: function() {
+        return loadTries;
+    }
+});
+var _triesearch = /*#__PURE__*/ _interop_require_default(require("trie-search"));
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+var allTrie = new _triesearch.default('name');
+var failedTrie = new _triesearch.default('name');
+var loadTries = function() {
+// const pages = window.data.pages;
+// const partitions = Math.ceil(pages / PAGES_PER_PARTITION);
+// Array(partitions)
+//     .fill(0)
+//     .forEach(async (_, i) => {
+//         window.data.providers[i]().then((pages) => {
+//             pages.forEach((page) =>
+//                 page.forEach((feature) => {
+//                     if (feature.failed) {
+//                         failedTrie.add({
+//                             name: feature.name,
+//                             feature,
+//                         });
+//                     }
+//                     allTrie.add({
+//                         name: feature.name,
+//                         feature,
+//                     });
+//                 })
+//             );
+//         });
+//     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.loadTries = exports.failedTrie = exports.allTrie = void 0;
-const constants_1 = require("./constants");
-const trie_search_1 = __importDefault(require("trie-search"));
-exports.allTrie = new trie_search_1.default('name');
-exports.failedTrie = new trie_search_1.default('name');
-const loadTries = () => {
-    const pages = window.data.pages;
-    const partitions = Math.ceil(pages / constants_1.PAGES_PER_PARTITION);
-    Array(partitions)
-        .fill(0)
-        .forEach((_, i) => __awaiter(void 0, void 0, void 0, function* () {
-        window.data.providers[i]().then((pages) => {
-            pages.forEach((page) => page.forEach((feature) => {
-                if (feature.failed) {
-                    exports.failedTrie.add({
-                        name: feature.name,
-                        feature,
-                    });
-                }
-                exports.allTrie.add({
-                    name: feature.name,
-                    feature,
-                });
-            }));
-        });
-    }));
-};
-exports.loadTries = loadTries;
 
-},{"./constants":1,"trie-search":13}],8:[function(require,module,exports){
+},{"trie-search":13}],8:[function(require,module,exports){
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const trie_1 = require("./trie");
-const engine_1 = __importDefault(require("./engine"));
-const listeners_1 = __importDefault(require("./listeners"));
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var _trie = require("./trie");
+var _engine = /*#__PURE__*/ _interop_require_default(require("./engine"));
+var _listeners = /*#__PURE__*/ _interop_require_default(require("./listeners"));
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
 if (window.config.showFailedOnStart) {
     console.info('Showing failed features only on load');
 }
-(0, trie_1.loadTries)();
-engine_1.default.setFailedOnly(window.config.showFailedOnStart);
-(0, listeners_1.default)(window.config.showFailedOnStart);
+(0, _trie.loadTries)();
+_engine.default.setFailedOnly(window.config.showFailedOnStart);
+(0, _listeners.default)(window.config.showFailedOnStart);
 
 },{"./engine":2,"./listeners":4,"./trie":7}],9:[function(require,module,exports){
 module.exports = require('./src/HashArray.js');

@@ -231,6 +231,7 @@ var engineInternal = {
                         ];
                     case 1:
                         pages = _state.sent();
+                        console.log(pages);
                         contentElem.innerHTML = (0, _templating.genFeatureHtml)(pages[page]);
                         engineInternal.allScenarios.splice(0, engineInternal.allScenarios.length);
                         (_engineInternal_allScenarios = engineInternal.allScenarios).push.apply(_engineInternal_allScenarios, _to_consumable_array(document.getElementsByClassName('scenario')));
@@ -250,7 +251,9 @@ var engineInternal = {
         var pages = engineInternal.failedFeaturesOnly ? window.failed.pages : window.data.pages;
         // Remove existing pagination buttons
         paginationElem.innerHTML = '';
-        (0, _pagination.genPaginationElements)(pages, paginationElem, engine.togglePage);
+        (0, _pagination.genPaginationElements)(pages, paginationElem, function(page) {
+            return engine.togglePage(page);
+        });
     }
 };
 var initEngine = function(failedOnly) {
@@ -281,6 +284,7 @@ var engine = {
     togglePage: function() {
         var _ref = _async_to_generator(function(page) {
             return _ts_generator(this, function(_state) {
+                console.log('toggle page');
                 engineInternal.togglePage(page);
                 return [
                     2

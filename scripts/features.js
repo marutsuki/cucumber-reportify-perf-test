@@ -8,7 +8,7 @@ Object.defineProperty(exports, "features", {
         return features;
     }
 });
-var _constants = require("./constants");
+var _constants = require("../constants");
 var _trie = require("./trie");
 var cache;
 var lastCall = {
@@ -18,8 +18,10 @@ var lastCall = {
 };
 var features = function(partitionIndex, failedOnly, searchFilter) {
     if (cache !== undefined && lastCall.partitionIndex === partitionIndex && lastCall.failedOnly === failedOnly && lastCall.searchFilter === searchFilter) {
+        console.log('got here');
         return Promise.resolve(cache);
     }
+    console.log(partitionIndex);
     return (failedOnly ? window.failed.providers : window.data.providers)[partitionIndex]();
     var results = (failedOnly ? _trie.failedTrie : _trie.allTrie).get(searchFilter);
     var ret = [];
